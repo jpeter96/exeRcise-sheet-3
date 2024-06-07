@@ -7,6 +7,7 @@ output: distill::distill_article
 ---
 
 ## Exercise 1: Initializing git (4 Points)
+
 ### Exercise 1d: 
 #### Strengths of Git: 
 #### 1.: Distributed Version Control
@@ -16,14 +17,20 @@ output: distill::distill_article
 #### 2.: Potential for Conflicts
 
 ## Exercise 2: Putting your Repository on GitHub (3.5 Points)
+
 ### Exercise 2a,b,c: 
 https://github.com/jpeter96/exeRcise-sheet-3
 
 ## Exercise 3: Baby-Names in Munich (3.5 Points)
+
 ### Exercise 3a,b,c:
 ```{r}
 library(dplyr)
 library(readr)
+library(knitr)
+install.packages("kableExtra")
+library(kableExtra)
+library(ggplot2)
 
 data_2022 <- read_csv("data/open_data_portal_2022.csv")
 data_2023 <- read_csv("data/vornamen-muenchen-2023.csv")
@@ -53,32 +60,76 @@ total_babies_2023 <- sum(data_2023$Anzahl, na.rm = TRUE)
 total_babies_2022
 total_babies_2023
 ```
+### Exercise 3d:
+```{r}
+data_2022 <- data_2022 %>%
+  mutate(year = 2022)
 
+data_2023 <- data_2023 %>%
+  mutate(year = 2023)
+
+head(data_2022)
+head(data_2023)
+```
+### Exercise 3e:
+```{r}
+combined_data <- bind_rows(data_2022, data_2023)
+
+head(combined_data)
+```
+### Exercise 3f:
+```{r}
+combined_data$Anzahl <- as.numeric(gsub("[^0-9]", "", combined_data$Anzahl))
+
+combined_counts <- combined_data %>%
+  group_by(Vorname) %>%
+  summarize(Total_Anzahl = sum(Anzahl, na.rm = TRUE)) %>%
+  arrange(desc(Total_Anzahl))
+
+top_10_names <- combined_counts %>%
+  head(10)
+
+kable(top_10_names, caption = "Top 10 Most Popular Baby Names in Munich (2022 & 2023)") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+```
 ## Exercise 4: Open Analysis (4 points)
 
-This exercise is a bit more open-ended. You can choose any dataset from
-[Our World in Data](https://ourworldindata.org/) and analyze it, while
-determining the research question yourself.
+### Exercise 4a,b,c:
+-   Dataset Name: CO2 emissions by source - CDIAC (2016)
+-   Link: <https://github.com/owid/owid-datasets/blob/master/datasets/CO2%20emissions%20by%20source%20-%20CDIAC%20(2016)/CO2%20emissions%20by%20source%20-%20CDIAC%20(2016).csv>...
+```{r}
+co2_data <- read_csv("data/CO2-emissions-by-source-CDIAC_2016.csv")
 
-a)  Go to <https://github.com/owid/owid-datasets/tree/master/datasets>
-    and choose a dataset that interests you. You can have a look at
-    <https://ourworldindata.org/> to gather some inspiration.
-b)  Download the dataset and track it in git.
-c)  Put the name / title of the dataset and a link to it below.
+head(co2_data)
 
--   Dataset Name: ...
--   Link: <https://github.com/owid/owid-datasets/>...
+summary(co2_data)
 
-d)  Come up with a (research) question you want to answer with the data
-    and briefly explain why you believe this is an interesting question
-    within one sentence. It should be a question that can be answered
-    with the dataset and using R.
-e)  Use R to answer your chosen question.
-f)  Create a meaningful plot / figure with the dataset. Make sure to
-    provide a figure caption (via the chunk options / Rmarkdown) and
-    correctly label the figure.
+str(co2_data)
+```
+### Exercise 4d:
+Research Question: How has the distribution of CO2 emissions from various sources evolved over time, and what are the main contributors to global CO2 emissions?
+This question is interesting because it is becoming more relevant by the day as our global climate is warming and CO2 is a leading cause-factor. 
 
-## Final Note
+### Exercise 4e:
+```{r}
+co2_data <- co2_data %>%
+  mutate(total_emissions = `Solid fuel consumption (CDIAC (2016))` + 
+                            `Liquid fuel consumption (CDIAC (2016))` +
+                            `Gas fuel consumption (CDIAC (2016))` +
+                            `Cement production (CDIAC (2016))` +
+                            `Gas flaring (CDIAC (2016))`)
 
-Make sure to push all your commits and changes to GitHub before
-submittining the exercise sheet.
+head(co2_data)
+```
+### Exercise 4f:
+```{r}
+co2_data <- co2_data %>%
+  na.omit()
+
+ggplot(co2_data, aes(x = Year, y = total_emissions, color = Entity)) +
+  geom_line() +
+  labs(title = "Total CO2 Emissions Over Time",
+       x = "Year",
+       y = "Total CO2 Emissions (metric tons)")
+```
+
