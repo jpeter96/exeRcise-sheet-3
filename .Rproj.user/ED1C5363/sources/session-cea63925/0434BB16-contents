@@ -21,16 +21,8 @@ output: distill::distill_article
 ### Exercise 2a,b,c: 
 #### https://github.com/jpeter96/exeRcise-sheet-3
 
+
 ## Exercise 3: Baby-Names in Munich (3.5 Points)
-
-Download the latest open datasets on given names ("Vornamen") from the
-open data repository of the city of Munich for the years `2023` and
-`2022`.
-
-Link: <https://opendata.muenchen.de/dataset/vornamen-von-neugeborenen>
-
-a)  Download the data for both years and track it in git. For small
-    datasets like these adding them to git is not a problem.
 
 b)  Load the data for both years into R. Check the type of the count
     variable ("Anzahl") and look into the data to determine why it is
