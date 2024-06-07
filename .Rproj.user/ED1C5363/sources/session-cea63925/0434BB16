@@ -3,7 +3,7 @@
     "path": "C:/Users/jpete/OneDrive/Desktop/Uni/(4.) SS 24/StatSoft2/Abgaben/Abgabe-U3/2024-exeRcise-sheet-3/StatProg2-Abgabe-U3.Rmd",
     "project_path": "StatProg2-Abgabe-U3.Rmd",
     "type": "r_markdown",
-    "hash": "2273505883",
+    "hash": "2774291446",
     "contents": "",
     "dirty": true,
     "created": 1717671473776.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "31,0",
-        "scrollLine": "12"
+        "cursorPosition": "67,0",
+        "scrollLine": "57"
     },
     "folds": "",
     "lastKnownWriteTime": 1717672672,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1717770889197,
+    "last_content_update": 1717771945476,
     "read_only": false,
     "read_only_alternatives": []
 }

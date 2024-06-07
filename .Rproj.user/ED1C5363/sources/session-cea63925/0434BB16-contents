@@ -24,11 +24,47 @@ output: distill::distill_article
 
 ## Exercise 3: Baby-Names in Munich (3.5 Points)
 
-b)  Load the data for both years into R. Check the type of the count
-    variable ("Anzahl") and look into the data to determine why it is
-    not numeric? Fix the problem in an appropriate manner, it is OK if
-    some of the counts are inaccurate because of this. Explain your
-    solution and the repercussions.
+### Exercise 3b:
+```{r}
+library(dplyr)
+library(readr)
+
+data_2022 <- read_csv("exeRcise-sheet-3/data/open_data_portal_2022.csv")
+data_2023 <- read_csv("exeRcise-sheet-3/data/vornamen-muenchen-2023.csv")
+
+str(data_2022)
+str(data_2023)
+
+# Check the type of the count variable "Anzahl" in both datasets
+summary(data_2022$Anzahl)
+summary(data_2023$Anzahl)
+
+# Identify non-numeric entries in the count variable
+unique(data_2022$Anzahl[!grepl("^[0-9]+$", data_2022$Anzahl)])
+unique(data_2023$Anzahl[!grepl("^[0-9]+$", data_2023$Anzahl)])
+
+# Convert the count variable to numeric, replacing non-numeric entries with NA
+data_2022$Anzahl <- as.numeric(gsub("[^0-9]", "", data_2022$Anzahl))
+data_2023$Anzahl <- as.numeric(gsub("[^0-9]", "", data_2023$Anzahl))
+
+# Check the result of the conversion
+summary(data_2022$Anzahl)
+summary(data_2023$Anzahl)
+
+# Save the cleaned data back to CSV files
+write_csv(data_2022, "exeRcise-sheet-3/data/cleaned_data_2022.csv")
+write_csv(data_2023, "exeRcise-sheet-3/data/cleaned_data_2023.csv")
+```
+
+Explanation and Repercussions
+We began by loading the data from the CSV files for the years 2022 and 2023 using the read_csv function from the readr package. After loading the data, we examined the structure and summary statistics to understand the contents and identify any issues with the Anzahl variable, which represents counts.
+
+It was observed that the Anzahl variable contained non-numeric characters, which prevented it from being treated as a numeric variable. To address this, we used the gsub function to remove any characters that were not digits (0-9). After cleaning the data, we converted the Anzahl variable to a numeric type. Any entries that could not be converted were replaced with NA.
+
+Converting the Anzahl variable to numeric ensures that the data is suitable for quantitative analysis. However, this process may introduce some inaccuracies. For example, entries with non-numeric characters such as commas (e.g., "1,234") or mixed content (e.g., "12a") might be misinterpreted or lead to missing values (NA). These inaccuracies can affect the results of subsequent analyses, especially if the count data is critical for deriving insights or making decisions.
+
+Handling missing values is another important consideration. While converting non-numeric entries to NA helps in cleaning the data, it also introduces missing values that need to be appropriately managed in any analysis to avoid biased results or incorrect conclusions.
+
 
 c)  Calculate the total number of babies born in Munich in 2022
     and 2023. Which year had the bigger baby-boom?
